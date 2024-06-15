@@ -3,3 +3,4 @@ Flask-Cors
 flask-openapi3
 pydantic
 typing_extensions
+requests
