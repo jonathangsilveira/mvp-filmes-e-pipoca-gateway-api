@@ -5,4 +5,4 @@ from .tmdb.model.genre_model import GenreModel
 from .tmdb.controller.movie_details import get_details
 
 TMDB_API_KEY = ''
-TMDB_IMAGE_URL = ''
+TMDB_IMAGE_URL = 'https://image.tmdb.org/t/p/original'
