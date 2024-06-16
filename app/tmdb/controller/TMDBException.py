@@ -1,0 +1,37 @@
+from requests import Response
+from typing import Optional
+
+from app.tmdb.model.error_model import ErrorModel
+
+class TMDBException(Exception):
+    """
+    Exceção lançada quando a reposta da API do TMDB for de falha.
+    """
+    
+    status_code: Optional[int]
+    status_messagem: Optional[str]
+
+    def __init__(self, *args: object, 
+                 status_code: Optional[int] = None, status_messagem: Optional[str] = None
+                 ) -> None:
+        """
+        Parâmetros:
+            status_code: Código de erro da API do TMDB.
+            status_message: Mensagem de erro da API do TMDB.
+        """
+        super().__init__(*args)
+        self.status_code = status_code
+        self.status_messagem = status_messagem
+
+def raise_for_tmdb_error(response: Response) -> None:
+    """
+    Valida se o retorno da requisição a API do TMDB é de erro para lançar a exceção TMDBException.
+    """
+    if response.ok:
+        return
+    body = response.json()
+    if 'status_messagem' in body:
+        raise TMDBException(
+            status_code=body['status_code'], 
+            status_messagem=body['status_message']
+        )

@@ -1,14 +1,14 @@
 from pydantic import BaseModel
 from typing import Optional
 
-class BuscaPorTermoSchemaModel(BaseModel):
+class MovieSearchSchemaModel(BaseModel):
     """
-    Define contrato para busca por termo
+    Define contrato para busca de filmes por termo
     """
-    termo: str = "Marvel"
-    idioma: str = "pt-BR"
-    ano: Optional[int] = None
-    pagina: int = 1
+    query: str = "Marvel"
+    language: str = "pt-BR"
+    year: Optional[int] = None
+    page: int = 1
 
 class MovieDetailsSchemaModel(BaseModel):
     """

@@ -41,11 +41,49 @@ def get_movie_details(query: MovieDetailsSchemaModel):
             status=200,
             mimetype='application/json'
         )
+    except TMDBException as tmdb:
+        return make_error_response(
+            message=f'Erro ao chamar serviço externo: {tmdb.status_code} - {tmdb.status_messagem}', 
+            code=404
+        )
     except Exception as cause:
         return make_error_response(
             message=f'Não foi possível retornar os detalhos do id {query.movie_id}', 
             code=404
-        ) 
+        )
+    
+@app.get('/api/search/movie')
+def get_search_movies(query: MovieSearchSchemaModel) -> Response:
+    """
+    Busca por filmes contendo o termo pesquisado e ano de lançamento (opcional).
+    """
+    try:
+        page = search_movies(api_key=TMDB_API_KEY, query=query.query, 
+                                language=query.language, page=query.page, 
+                                year=query.year)
+        movies: list[MovieSearchModel] = []
+        for movie in page.results:
+            movies.append(
+                movie.model_copy(
+                    update={'poster_path': f'{TMDB_IMAGE_URL}/{movie.poster_path}'}
+                )
+            )
+        copied_page = page.model_copy(update={'results': movies})
+        return Response(
+            response=copied_page.model_dump_json(exclude_unset=True),
+            status=200,
+            mimetype='application/json'
+        )
+    except TMDBException as tmdb:
+        return make_error_response(
+            message=f'Erro ao chamar serviço externo: {tmdb.status_code} - {tmdb.status_messagem}', 
+            code=404
+        )
+    except Exception as cause:
+        return make_error_response(
+            message=f'Não foi possível retornar resultados para o termo buscado: {query.query}', 
+            code=400
+        )
     
 def make_error_response(message: str, code: int) -> Response:
     """
