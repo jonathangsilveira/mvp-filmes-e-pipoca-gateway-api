@@ -10,12 +10,20 @@ class MovieSearchSchemaModel(BaseModel):
     year: Optional[int] = None
     page: int = 1
 
-class MovieDetailsSchemaModel(BaseModel):
+class MovieDetailsQuerySchema(BaseModel):
     """
     Define contrato para exibir detalhes do filme.
     """
-    movie_id: int = 250
     language: str = "pt-BR"
+
+class MovieDetailsPathSchema(BaseModel):
+    """
+    Define contrato para parâmetro do path da requisição.
+
+    Parâmetros:
+        movie_id: ID do filme.
+    """
+    movie_id: int = 1022789
 
 class ErrorSchemaModel(BaseModel):
     """

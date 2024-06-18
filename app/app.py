@@ -10,18 +10,18 @@ app = OpenAPI(__name__, info=info)
 CORS(app)
 
 @app.route('/api')
-def documentacao_swagger():
+def swagger_doc():
     """Redireciona para visualização do estilo de documentação Swagger.
     """
     return redirect('/openapi/swagger')
 
-@app.get('/api/movie')
-def get_movie_details(query: MovieDetailsSchemaModel):
+@app.get('/api/movie/<int:movie_id>')
+def get_movie_details(path: MovieDetailsPathSchema, query: MovieDetailsQuerySchema):
     """
-    Retorna detalhes do filme.
+    Retorna detalhes do filme passado no parâmetro do path.
     """
     try:
-        details = get_details(api_key=TMDB_API_KEY, movie_id=query.movie_id, 
+        details = get_details(api_key=TMDB_API_KEY, movie_id=path.movie_id, 
                               language=query.language)
         return Response(
             response=json.dumps({
