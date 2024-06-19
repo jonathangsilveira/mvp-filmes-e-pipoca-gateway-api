@@ -14,4 +14,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Define o comando de execução da API
-CMD ["flask", "app", "./app/app.py", "run", "--host", "0.0.0.0", "--port", "5000"]
+CMD ["flask", "--app", "./app/app.py", "run", "--host", "0.0.0.0", "--port", "5000"]
