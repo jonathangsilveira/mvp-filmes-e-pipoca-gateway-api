@@ -1,5 +1,6 @@
 from .schemas.schema_models import MovieSearchSchemaModel
-from .schemas.schema_models import MovieDetailsSchemaModel
+from .schemas.schema_models import MovieDetailsQuerySchema
+from .schemas.schema_models import MovieDetailsPathSchema
 from .tmdb.model.movie_details_model import MovieDetailsModel
 from .tmdb.model.genre_model import GenreModel
 from .tmdb.model.paged_search_result_model import PagedSearchResultModel
