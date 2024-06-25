@@ -1,13 +1,13 @@
-from requests import get, Response, HTTPError
+from requests import get, Response
 from typing import Optional
 
 from app.tmdb.config import SERVER_URL
-from app.tmdb.model.paged_search_result_model import PagedSearchResultModel
+from app.tmdb.model.tmdb_search_result_model import TMDBMovieSearchResultsModel
 from app.tmdb.controller.TMDBException import raise_for_tmdb_error
 
 def search_movies(api_key: str, query: str, 
                   language: str, page: int = 1, 
-                  year: Optional[int] = None) -> PagedSearchResultModel:
+                  year: Optional[int] = None) -> TMDBMovieSearchResultsModel:
     """
     Busca por filmes dado o termo e o ano.
     Retorna os resultados paginados.
@@ -26,6 +26,6 @@ def search_movies(api_key: str, query: str,
                 'api_key': api_key}
     )
     raise_for_tmdb_error(response)
-    data = response.json()
-    return PagedSearchResultModel(**data)
+    body = response.json()
+    return TMDBMovieSearchResultsModel(**body)
     
