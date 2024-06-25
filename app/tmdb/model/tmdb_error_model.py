@@ -1,6 +1,6 @@
 from typing import Optional
 
-class ErrorModel:
+class TMDBErrorModel:
     """
     Modelo que representa uma resposta de erro da API TMDB.
     """

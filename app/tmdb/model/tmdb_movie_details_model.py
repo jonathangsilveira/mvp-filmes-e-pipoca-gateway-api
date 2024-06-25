@@ -1,9 +1,9 @@
 from typing import Optional
 from pydantic import BaseModel
 
-from app.tmdb.model.genre_model import GenreModel
+from app.tmdb.model.tmdb_genre_model import TMDBGenreModel
 
-class MovieDetailsModel(BaseModel):
+class TMDBMovieDetailsModel(BaseModel):
     """
     Modelo representando os detalhes do filme obtidos na API do TMDB.
     """
@@ -23,6 +23,6 @@ class MovieDetailsModel(BaseModel):
     status: Optional[str] = None
     tagline: Optional[str] = None
     budget: Optional[int] = None
-    genres: Optional[list[GenreModel]] = None
+    genres: Optional[list[TMDBGenreModel]] = None
     homepage: Optional[str] = None
     imdb_id: Optional[str] = None
