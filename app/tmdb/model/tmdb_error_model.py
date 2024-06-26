@@ -1,6 +1,7 @@
 from typing import Optional
+from pydantic import BaseModel
 
-class TMDBErrorModel:
+class TMDBErrorModel(BaseModel):
     """
     Modelo que representa uma resposta de erro da API TMDB.
     """

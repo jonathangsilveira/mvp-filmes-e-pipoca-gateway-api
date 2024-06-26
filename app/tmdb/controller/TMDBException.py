@@ -28,7 +28,8 @@ def raise_for_tmdb_error(response: Response) -> None:
     """
     if response.ok:
         return
-    model = TMDBErrorModel(**response.json())
+    body = response.json()
+    model = TMDBErrorModel(**body)
     raise TMDBException(
         status_code=model.status_code, 
         status_messagem=model.status_message
