@@ -19,11 +19,16 @@ def search_movies(api_key: str, query: str,
         year: Ano de lançamento do filme.
         page: Página para exibir os resultados.
     """
+
+    query_params = {
+        'query': query, 
+        'language': language, 
+        'year': year, 'page': page, 
+        'api_key': api_key
+    }
     response: Response = get(
         url=f'{SERVER_URL}/search/movie', 
-        params={'query': query, 'language': language, 
-                'year': year, 'page': page, 
-                'api_key': api_key}
+        params=query_params
     )
     raise_for_tmdb_error(response)
     body = response.json()
