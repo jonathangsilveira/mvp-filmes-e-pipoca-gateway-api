@@ -1,7 +1,7 @@
 from requests import Response
 from typing import Optional
 
-from app.tmdb.model.error_model import ErrorModel
+from app.tmdb.model.tmdb_error_model import TMDBErrorModel
 
 class TMDBException(Exception):
     """
@@ -12,8 +12,7 @@ class TMDBException(Exception):
     status_messagem: Optional[str]
 
     def __init__(self, *args: object, 
-                 status_code: Optional[int] = None, status_messagem: Optional[str] = None
-                 ) -> None:
+                 status_code: Optional[int] = None, status_messagem: Optional[str] = None) -> None:
         """
         Parâmetros:
             status_code: Código de erro da API do TMDB.
@@ -29,9 +28,9 @@ def raise_for_tmdb_error(response: Response) -> None:
     """
     if response.ok:
         return
-    body = response.json()
-    if 'status_messagem' in body:
-        raise TMDBException(
-            status_code=body['status_code'], 
-            status_messagem=body['status_message']
-        )
+    model = TMDBErrorModel(**response.json())
+    raise TMDBException(
+        status_code=model.status_code, 
+        status_messagem=model.status_message
+    )
+        
