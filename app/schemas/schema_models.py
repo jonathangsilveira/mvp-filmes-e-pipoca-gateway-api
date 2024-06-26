@@ -55,6 +55,32 @@ class MovieSearchResultsModel(BaseModel):
     total_results: int = 253
     results: list[MovieSearchResultModel] = []
 
+class GenreModel(BaseModel):
+    """
+    Define contrato para exibição de gêneros de filmes.
+    """
+    id: int = 16
+    name: str = 'Animação'
+
+class MovieDetailsModel(BaseModel):
+    """
+    Define contrato para exibição dos detalhes do filme.
+    """
+    id: int = 1022789
+    title: str = 'Divertida Mente 2'
+    original_title: str = 'Inside Out 2'
+    budget: int = 200000000
+    release_date: str = '2024-06-11'
+    runtime: str = '1h 40min'
+    overview: str = 'Divertida Mente 2, da Disney e Pixar, volta a entrar na mente da agora adolescente Riley, ...'
+    backdrop_path: str = '.../image.jpg'
+    poster_path: str = '.../image.jpg'
+    original_language: str = 'en'
+    tagline: str = 'Grandes mudanças. Novas emoções.'
+    revenue: int = 728993234
+    status: str = 'Lançado'
+    genres: list[GenreModel] = []
+
 class SuccessModel(BaseModel):
     """
     Define contraro para exibição de resultado de sucesso padrão.
