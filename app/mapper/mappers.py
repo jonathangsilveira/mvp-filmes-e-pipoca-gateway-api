@@ -3,6 +3,7 @@
 from app.tmdb.model.tmdb_search_result_model import TMDBMovieSearchResultsModel, TMDBMovieSearchResultModel
 from app.tmdb.model.tmdb_movie_details_model import TMDBGenreModel, TMDBMovieDetailsModel
 from app.schemas.schema_models import MovieSearchResultsModel, MovieSearchResultModel
+from app.schemas.schema_models import WatchlistMovieModel, WatchlistModel
 from app.schemas.schema_models import GenreModel, MovieDetailsModel
 from app.tmdb.config import TMDB_IMAGE_URL
 
@@ -16,7 +17,7 @@ def to_result_model(tmdb_model: TMDBMovieSearchResultsModel) -> MovieSearchResul
 
 def to_movie_model(tmdb_model: TMDBMovieSearchResultModel) -> MovieSearchResultModel:
     return MovieSearchResultModel(
-        movie_id=tmdb_model.id,
+        id=tmdb_model.id,
         original_title=tmdb_model.original_title,
         title=tmdb_model.title,
         release_date=tmdb_model.release_date,
@@ -57,5 +58,35 @@ def to_movie_detais_model(tmdb_model: TMDBMovieDetailsModel) -> MovieDetailsMode
         revenue=tmdb_model.revenue,
         runtime='{}h {}min'.format(*divmod(tmdb_model.runtime, 60)),
         status=tmdb_model.status,
-        tagline=tmdb_model.tagline
+        tagline=tmdb_model.tagline,
+        vote_average=tmdb_model.vote_average
+    )
+
+def to_watchlist_movie_model(tmdb_model: TMDBMovieDetailsModel) -> WatchlistMovieModel:
+    """
+    Mapeia modelo da resposta da API TMDB para detalhes do filme em modelo de resposta.
+
+    Parâmetro:
+        tmdb_model: Modelo de resposta da API externa.
+    """
+    return WatchlistMovieModel(
+        id=tmdb_model.id,
+        original_title=tmdb_model.original_title,
+        overview=tmdb_model.overview,
+        poster_path=f'{TMDB_IMAGE_URL}{tmdb_model.poster_path}',
+        release_date=tmdb_model.release_date,
+        title=tmdb_model.title,
+        vote_average=round(tmdb_model.vote_average, 0)
+    )
+
+def to_watchlist_model(tmdb_models: list[TMDBMovieDetailsModel], watchlist_id: int) -> WatchlistModel:
+    """
+    Mapeia modelo da resposta da API TMDB para detalhes do filme em modelo de resposta.
+
+    Parâmetro:
+        tmdb_model: Modelo de resposta da API externa.
+    """
+    return WatchlistModel(
+        id=watchlist_id,
+        movies=[to_watchlist_movie_model(detail) for detail in tmdb_models]
     )
