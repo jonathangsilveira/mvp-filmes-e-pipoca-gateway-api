@@ -13,6 +13,7 @@ class TMDBMovieDetailsModel(BaseModel):
     original_title: str
     title: str
     revenue: int
+    vote_average: float
     overview: Optional[str] = None
     poster_path: Optional[str] = None
     backdrop_path: Optional[str] = None
