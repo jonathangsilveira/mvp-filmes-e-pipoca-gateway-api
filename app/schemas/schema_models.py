@@ -18,7 +18,7 @@ class MovieDetailsQuerySchema(BaseModel):
 
 class MovieDetailsPathSchema(BaseModel):
     """
-    Define contrato para parâmetro do path da requisição.
+    Define contrato para parâmetro do path da requisição de detalhes do filme.
 
     Parâmetros:
         movie_id: ID do filme.
@@ -39,11 +39,12 @@ class MovieSearchResultModel(BaseModel):
     """
     Define contrato para exibição dos resultados da pesquisa por filmes.
     """
-    movie_id: int = 1022789
+    id: int = 1022789
     original_title: str = 'Inside Out 2'
     title: str = 'Divertidamente 2'
     release_date: str = '2024-06-11'
     overview: str = 'Divertida Mente 2, da Disney e Pixar, volta a entrar na mente da agora adolescente Riley, no momento ...'
+    vote_average: int = 78
     poster_path: Optional[str] = 'https://'
 
 class MovieSearchResultsModel(BaseModel):
@@ -79,11 +80,52 @@ class MovieDetailsModel(BaseModel):
     tagline: str = 'Grandes mudanças. Novas emoções.'
     revenue: int = 728993234
     status: str = 'Lançado'
+    vote_average: int = 78
     genres: list[GenreModel] = []
+
+class GetWatchlistQueryModel(BaseModel):
+    """
+    Define contrato para parâmetro de consulta de lista de interesses. 
+    """
+    watchlist_id: int = 1
+    language: str = 'pt-BR'
+
+class WatchlistMovieModel(BaseModel):
+    """
+    Define contrato para exibição do filme que compoe a lista de interesses.
+    """
+    id: int = 1022789
+    original_title: str = 'Inside Out 2'
+    title: str = 'Divertidamente 2'
+    release_date: str = '2024-06-11'
+    overview: str = 'Divertida Mente 2, da Disney e Pixar, volta a entrar na mente da agora adolescente Riley, no momento ...'
+    vote_average: int = 78
+    poster_path: Optional[str] = 'https://'
+
+class WatchlistModel(BaseModel):
+    """
+    Define contrato para parâmetro de consulta de lista de interesses. 
+    """
+    id: int = 1
+    movies: list[WatchlistMovieModel] = []
+
+class AddMovieToWatchlistPathModel(BaseModel):
+    """
+    Define contrato para parâmetro do path da requisição de adicionar filmes para lista de interesses.
+    """
+    watchlist_id: int = 1
+    movie_id: int = 1022789
+
+class RemoveMovieToWatchlistPathModel(BaseModel):
+    """
+    Define contrato para parâmetro do path da requisição de remover filmes da lista de interesses.
+    """
+    watchlist_id: int = 1
+    movie_id: int = 1022789
 
 class SuccessModel(BaseModel):
     """
-    Define contraro para exibição de resultado de sucesso padrão.
+    Define contrato para exibição de resultado de sucesso padrão.
     """
     message: str = 'Operação concluída com sucesso!'
 
