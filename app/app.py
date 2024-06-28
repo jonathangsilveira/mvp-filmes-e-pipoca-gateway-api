@@ -24,20 +24,21 @@ search_tag = Tag(name='Busca de filmes',
 
 @app.route('/api')
 def swagger_doc():
-    """Redireciona para visualização do estilo de documentação Swagger.
+    """
+    Redireciona para visualização do estilo de documentação Swagger.
     """
     return redirect('/openapi/swagger')
 
-@app.get(rule='/api/movie/<int:movie_id>', tags=[watchlist_tag], 
+@app.get(rule='/api/movie', tags=[watchlist_tag], 
          responses={200: MovieDetailsModel, 400: ErrorModel, 404: ErrorModel})
-def get_movie_details(path: MovieDetailsPathSchema, query: MovieDetailsQuerySchema):
+def get_movie_details(query: MovieDetailsQuerySchema) -> Response:
     """
-    Retorna detalhes do filme passado no parâmetro do path.
+    Retorna detalhes do filme passado no parâmetro do query.
     """
     try:
         details = get_details(
             api_key=TMDB_API_KEY, 
-            movie_id=path.movie_id, 
+            movie_id=query.movie_id, 
             language=query.language
         )
         return JsonResponse.make_json_response(
@@ -129,14 +130,14 @@ def get_watchlist(query: GetWatchlistQueryModel) -> Response:
             code=400
         )
     
-@app.post(rule='/api/watchlist/<int:watchlist_id>/add/<int:movie_id>', tags=[watchlist_tag], 
+@app.post(rule='/api/watchlist/add', tags=[watchlist_tag], 
           responses={200: SuccessModel, 400: ErrorModel})
-def post_add_movie(path: AddMovieToWatchlistPathModel) -> Response:
+def post_add_movie(body: AddMovieToWatchlistBodyModel) -> Response:
     """
     Rota para adicionar um filme para dada lista de interesse.
     """
     try:
-        success = WatchlistController.add_movie(path.watchlist_id, path.movie_id)
+        success = WatchlistController.add_movie(body.watchlist_id, body.movie_id)
         return JsonResponse.make_json_response(
             model=success
         )
@@ -146,14 +147,14 @@ def post_add_movie(path: AddMovieToWatchlistPathModel) -> Response:
             code=400
         )
     
-@app.delete(rule='/api/watchlist/<int:watchlist_id>/remove/<int:movie_id>', tags=[watchlist_tag], 
+@app.delete(rule='/api/watchlist/remove', tags=[watchlist_tag], 
             responses={200: SuccessModel, 400: ErrorModel})
-def delete_remove_movie(path: RemoveMovieToWatchlistPathModel) -> Response:
+def delete_remove_movie(body: RemoveMovieToWatchlistBodyModel) -> Response:
     """
     Rota para adicionar um filme para dada lista de interesse.
     """
     try:
-        success = WatchlistController.remove_movie(path.watchlist_id, path.movie_id)
+        success = WatchlistController.remove_movie(body.watchlist_id, body.movie_id)
         return JsonResponse.make_json_response(
             model=success
         )

@@ -13,17 +13,13 @@ class MovieSearchSchemaModel(BaseModel):
 class MovieDetailsQuerySchema(BaseModel):
     """
     Define contrato para exibir detalhes do filme.
-    """
-    language: str = "pt-BR"
-
-class MovieDetailsPathSchema(BaseModel):
-    """
-    Define contrato para parâmetro do path da requisição de detalhes do filme.
 
     Parâmetros:
         movie_id: ID do filme.
+        language: Idioma de preferência.
     """
     movie_id: int = 1022789
+    language: str = "pt-BR"
 
 class TrendingMoviesModel(BaseModel):
     """
@@ -109,16 +105,16 @@ class WatchlistModel(BaseModel):
     id: int = 1
     movies: list[WatchlistMovieModel] = []
 
-class AddMovieToWatchlistPathModel(BaseModel):
+class AddMovieToWatchlistBodyModel(BaseModel):
     """
-    Define contrato para parâmetro do path da requisição de adicionar filmes para lista de interesses.
+    Define contrato para parâmetro do body da requisição de adicionar filmes para lista de interesses.
     """
     watchlist_id: int = 1
     movie_id: int = 1022789
 
-class RemoveMovieToWatchlistPathModel(BaseModel):
+class RemoveMovieToWatchlistBodyModel(BaseModel):
     """
-    Define contrato para parâmetro do path da requisição de remover filmes da lista de interesses.
+    Define contrato para parâmetro do body da requisição de remover filmes da lista de interesses.
     """
     watchlist_id: int = 1
     movie_id: int = 1022789
