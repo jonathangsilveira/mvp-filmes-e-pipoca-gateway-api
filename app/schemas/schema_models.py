@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 from typing import Optional
 
 class MovieSearchSchemaModel(BaseModel):
@@ -122,6 +122,25 @@ class RemoveMovieToWatchlistPathModel(BaseModel):
     """
     watchlist_id: int = 1
     movie_id: int = 1022789
+
+class RateMovieBodyModel(BaseModel):
+    """
+    Define contrato para exibição avaliação de filmes.
+
+    Parâmetros:
+        movie_id: ID do filme.
+        rate_value: Valor entre 0 e 10 para avaliação fo filme.
+    """
+    movie_id: int = 1022789
+    rate_value: int = 9
+
+    @field_validator('rate_value')
+    @classmethod
+    def validate_rate_value(cls, v: int) -> int:
+        # Valida se rate_value está entre 0 e 10.
+        if v > 10 and v < 0:
+            raise ValueError('Nota da avaliação deve ser entre 0 e 10!')
+        return v
 
 class SuccessModel(BaseModel):
     """

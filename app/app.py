@@ -151,3 +151,22 @@ def delete_remove_movie(path: RemoveMovieToWatchlistPathModel) -> Response:
             message=f'Não foi possível criar uma nova lista de interesse!', 
             code=400
         )
+    
+@app.put(rule='/api/movie/rate')
+def put_rate_movie(body: RateMovieBodyModel) -> Response:
+    """
+    Rota para fornecer uma avaliação para filmes.
+    """
+    try:
+        result = rate_movie(
+            movie_id=body.movie_id, 
+            rate_value=body.rate_value
+        )
+        return JsonResponse.make_json_response(
+            model=result
+        )
+    except Exception:
+        return JsonResponse.make_error_response(
+            message=f'Não foi avaliar o filme {body.movie_id}', 
+            code=400
+        )
