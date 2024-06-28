@@ -15,13 +15,21 @@ info = Info(title="MVP Filmes e Pipoca Gateway API", version="1.0.0")
 app = OpenAPI(__name__, info=info)
 CORS(app)
 
+rate_tag = Tag(name='Avaliação de filmes', 
+               description='Avaliar um filme atribuindo uma nota de 0 a 10')
+watchlist_tag = Tag(name='Lista para assistir depois', 
+                    description='Adição, remoção e visualização de lista com filmes.')
+search_tag = Tag(name='Busca de filmes', 
+                 description='Busca de filmes por termo')
+
 @app.route('/api')
 def swagger_doc():
     """Redireciona para visualização do estilo de documentação Swagger.
     """
     return redirect('/openapi/swagger')
 
-@app.get('/api/movie/<int:movie_id>')
+@app.get(rule='/api/movie/<int:movie_id>', tags=[watchlist_tag], 
+         responses={200: MovieDetailsModel, 400: ErrorModel, 404: ErrorModel})
 def get_movie_details(path: MovieDetailsPathSchema, query: MovieDetailsQuerySchema):
     """
     Retorna detalhes do filme passado no parâmetro do path.
@@ -47,7 +55,8 @@ def get_movie_details(path: MovieDetailsPathSchema, query: MovieDetailsQuerySche
             code=400
         )
     
-@app.get('/api/search/movie')
+@app.get(rule='/api/search/movie', tags=[search_tag], 
+         responses={200: MovieSearchResultsModel, 400: ErrorModel, 404: ErrorModel})
 def get_search_movies(query: MovieSearchSchemaModel) -> Response:
     """
     Busca por filmes contendo o termo pesquisado e ano de lançamento (opcional).
@@ -75,7 +84,8 @@ def get_search_movies(query: MovieSearchSchemaModel) -> Response:
             code=400
         )
 
-@app.post('/api/watchlist/create')
+@app.post(rule='/api/watchlist/create', tags=[watchlist_tag], 
+          responses={200: models.WatchlistCreatedModel, 400: ErrorModel})
 def post_create_watchlist() -> Response:
     """
     Rota que cria uma nova lista de interesse.
@@ -86,13 +96,13 @@ def post_create_watchlist() -> Response:
             model=watchlist_created
         )
     except Exception as e:
-        print(f'Erro: {str(e)}')
         return JsonResponse.make_error_response(
             message=f'Não foi possível criar uma nova lista de interesse!', 
             code=400
         )
 
-@app.get(rule='/api/watchlist')
+@app.get(rule='/api/watchlist', tags=[watchlist_tag], 
+         responses={200: WatchlistModel, 400: ErrorModel})
 def get_watchlist(query: GetWatchlistQueryModel) -> Response:
     """
     Rota que cria uma nova lista de interesse.
@@ -114,13 +124,13 @@ def get_watchlist(query: GetWatchlistQueryModel) -> Response:
             )
         )
     except Exception as e:
-        print(f'Erro: {str(e)}')
         return JsonResponse.make_error_response(
             message=f'Não foi possível criar uma nova lista de interesse!', 
             code=400
         )
     
-@app.post(rule='/api/watchlist/<int:watchlist_id>/add/<int:movie_id>')
+@app.post(rule='/api/watchlist/<int:watchlist_id>/add/<int:movie_id>', tags=[watchlist_tag], 
+          responses={200: SuccessModel, 400: ErrorModel})
 def post_add_movie(path: AddMovieToWatchlistPathModel) -> Response:
     """
     Rota para adicionar um filme para dada lista de interesse.
@@ -136,7 +146,8 @@ def post_add_movie(path: AddMovieToWatchlistPathModel) -> Response:
             code=400
         )
     
-@app.delete(rule='/api/watchlist/<int:watchlist_id>/remove/<int:movie_id>')
+@app.delete(rule='/api/watchlist/<int:watchlist_id>/remove/<int:movie_id>', tags=[watchlist_tag], 
+            responses={200: SuccessModel, 400: ErrorModel})
 def delete_remove_movie(path: RemoveMovieToWatchlistPathModel) -> Response:
     """
     Rota para adicionar um filme para dada lista de interesse.
@@ -152,7 +163,8 @@ def delete_remove_movie(path: RemoveMovieToWatchlistPathModel) -> Response:
             code=400
         )
     
-@app.put(rule='/api/movie/rate')
+@app.put(rule='/api/movie/rate', tags=[rate_tag], 
+         responses={200: SuccessModel, 400: ErrorModel})
 def put_rate_movie(body: RateMovieBodyModel) -> Response:
     """
     Rota para fornecer uma avaliação para filmes.
