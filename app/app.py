@@ -9,7 +9,7 @@ from app import *
 from app.response.json_response import JsonResponse
 
 from app.mapper.mappers import to_result_model, to_movie_detais_model
-from app.mapper.mappers import to_watchlist_model
+from app.mapper.mappers import to_watchlist_model, to_trending_movies_model
 
 info = Info(title="MVP Filmes e Pipoca Gateway API", version="1.0.0")
 app = OpenAPI(__name__, info=info)
@@ -21,6 +21,8 @@ watchlist_tag = Tag(name='Lista para assistir depois',
                     description='Adição, remoção e visualização de lista com filmes.')
 search_tag = Tag(name='Busca de filmes', 
                  description='Busca de filmes por termo')
+trendings_tag = Tag(name='Filmes em alta', 
+                    description='Lista os filmes em alta pela janela de tempo')
 
 @app.route('/api')
 def swagger_doc():
@@ -181,5 +183,27 @@ def put_rate_movie(body: RateMovieBodyModel) -> Response:
     except Exception:
         return JsonResponse.make_error_response(
             message=f'Não foi avaliar o filme {body.movie_id}', 
+            code=400
+        )
+    
+@app.get(rule='/api/trending/movies', tags=[trendings_tag], 
+         responses={200: TrendingMoviesModel, 400: ErrorModel})
+def get_trendings(query: GetTrendingMoviesQueryModel) -> Response:
+    """
+    Rota para lista os filmes em alta dado um período de tempo.
+    """
+    try:
+        results = get_trending_movies(
+            api_key=TMDB_API_KEY,
+            language=query.language,
+            time_window=query.time_window
+        )
+        trendings = to_trending_movies_model(results)
+        return JsonResponse.make_json_response(
+            model=trendings
+        )
+    except Exception:
+        return JsonResponse.make_error_response(
+            message=f'Não foi possível listas os filmes em alta para janela de tempo {query.time_window}', 
             code=400
         )

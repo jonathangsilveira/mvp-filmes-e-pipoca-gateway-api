@@ -25,7 +25,7 @@ class TrendingMoviesModel(BaseModel):
     """
     Define contrato para exibição dos filmes em destaque.
     """
-    movie_id: int = 1022789
+    id: int = 1022789
     title: str = 'Divertida Mente 2'
     vote_average: int = 78
     release_date: str = '2024-06-11'
@@ -137,6 +137,13 @@ class RateMovieBodyModel(BaseModel):
         if v > 10 and v < 0:
             raise ValueError('Nota da avaliação deve ser entre 0 e 10!')
         return v
+
+class GetTrendingMoviesQueryModel(BaseModel):
+    """
+    Define contrato para busca de filmes em alta por período de tempo.
+    """
+    language: str = "pt-BR"
+    time_window: Optional[str] = 'day'
 
 class SuccessModel(BaseModel):
     """

@@ -2,9 +2,8 @@
 
 from app.tmdb.model.tmdb_search_result_model import TMDBMovieSearchResultsModel, TMDBMovieSearchResultModel
 from app.tmdb.model.tmdb_movie_details_model import TMDBGenreModel, TMDBMovieDetailsModel
-from app.schemas.schema_models import MovieSearchResultsModel, MovieSearchResultModel
-from app.schemas.schema_models import WatchlistMovieModel, WatchlistModel
-from app.schemas.schema_models import GenreModel, MovieDetailsModel
+from app.tmdb.model.tmdb_trending_movies import TMDBTrendingMoviesModel
+from app.schemas.schema_models import *
 from app.tmdb.config import TMDB_IMAGE_URL
 
 def to_result_model(tmdb_model: TMDBMovieSearchResultsModel) -> MovieSearchResultsModel:
@@ -89,4 +88,19 @@ def to_watchlist_model(tmdb_models: list[TMDBMovieDetailsModel], watchlist_id: i
     return WatchlistModel(
         id=watchlist_id,
         movies=[to_watchlist_movie_model(detail) for detail in tmdb_models]
+    )
+
+def to_trending_movies_model(tmdb_model: TMDBTrendingMoviesModel) -> TrendingMoviesModel:
+    """
+    Mapeia modelo da resposta da API TMDB para filmes em alta em modelo de resposta.
+
+    Parâmetro:
+        tmdb_model: Modelo de resposta da API externa.
+    """
+    return TrendingMoviesModel(
+        id=tmdb_model.id,
+        title=tmdb_model.title,
+        release_date=tmdb_model.release_date,
+        vote_average=round(tmdb_model.vote_average, 0),
+        poster_path=f'{TMDB_IMAGE_URL}{tmdb_model.poster_path}'
     )
