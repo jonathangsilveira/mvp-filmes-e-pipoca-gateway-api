@@ -2,11 +2,11 @@ from requests import get, Response
 from typing import Optional
 
 from app.tmdb.config import SERVER_URL
-from app.tmdb.model.tmdb_trending_movies import TMDBTrendingMoviesModel
+from app.tmdb.model.tmdb_trending_movies import TMDBTrendingMoviesModel, TMDBTrendingMoviesResultModel
 from app.tmdb.controller.TMDBException import raise_for_tmdb_error
 
 def get_trending_movies(api_key: str, language: str, 
-                        time_window: Optional[str] = None) -> TMDBTrendingMoviesModel:
+                        time_window: Optional[str] = None) -> TMDBTrendingMoviesResultModel:
     """
     Consulta os filmes que estão em alta dado um período de tempo.
 
@@ -25,4 +25,4 @@ def get_trending_movies(api_key: str, language: str,
     )
     raise_for_tmdb_error(response)
     body = response.json()
-    return TMDBTrendingMoviesModel(**body)
+    return TMDBTrendingMoviesResultModel(**body)

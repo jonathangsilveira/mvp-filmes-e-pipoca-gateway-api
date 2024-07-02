@@ -193,16 +193,17 @@ def get_trendings(query: GetTrendingMoviesQueryModel) -> Response:
     Rota para lista os filmes em alta dado um período de tempo.
     """
     try:
-        results = get_trending_movies(
+        result = get_trending_movies(
             api_key=TMDB_API_KEY,
             language=query.language,
             time_window=query.time_window
         )
-        trendings = to_trending_movies_model(results)
+        trendings = to_trending_movies_model(result)
         return JsonResponse.make_json_response(
             model=trendings
         )
-    except Exception:
+    except Exception as e:
+        print(f'Erro: {str(e)}')
         return JsonResponse.make_error_response(
             message=f'Não foi possível listas os filmes em alta para janela de tempo {query.time_window}', 
             code=400
