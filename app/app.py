@@ -187,7 +187,7 @@ def put_rate_movie(body: RateMovieBodyModel) -> Response:
         )
     
 @app.get(rule='/api/trending/movies', tags=[trendings_tag], 
-         responses={200: TrendingMoviesModel, 400: ErrorModel})
+         responses={200: TrendingMovieResultsModel, 400: ErrorModel})
 def get_trendings(query: GetTrendingMoviesQueryModel) -> Response:
     """
     Rota para lista os filmes em alta dado um período de tempo.
