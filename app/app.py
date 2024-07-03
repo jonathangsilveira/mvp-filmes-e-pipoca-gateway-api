@@ -98,7 +98,7 @@ def post_create_watchlist() -> Response:
         return JsonResponse.make_json_response(
             model=watchlist_created
         )
-    except Exception as e:
+    except Exception:
         return JsonResponse.make_error_response(
             message=f'Não foi possível criar uma nova lista de interesse!', 
             code=400
@@ -173,12 +173,19 @@ def put_rate_movie(body: RateMovieBodyModel) -> Response:
     Rota para fornecer uma avaliação para filmes.
     """
     try:
+        if body.rate_value > 10 or body.rate_value < 0:
+            raise InvalidRateException()
         result = rate_movie(
             movie_id=body.movie_id, 
             rate_value=body.rate_value
         )
         return JsonResponse.make_json_response(
             model=result
+        )
+    except InvalidRateException:
+        return JsonResponse.make_error_response(
+            message='Nota da avaliação deve ser entre 0 e 10!', 
+            code=400
         )
     except Exception:
         return JsonResponse.make_error_response(

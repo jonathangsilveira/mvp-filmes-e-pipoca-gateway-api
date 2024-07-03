@@ -1,5 +1,7 @@
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel
 from typing import Optional
+
+from app.schemas.exceptions import InvalidRateException
 
 class MovieSearchSchemaModel(BaseModel):
     """
@@ -138,14 +140,6 @@ class RateMovieBodyModel(BaseModel):
     """
     movie_id: int = 1022789
     rate_value: int = 9
-
-    @field_validator('rate_value')
-    @classmethod
-    def validate_rate_value(cls, v: int) -> int:
-        # Valida se rate_value está entre 0 e 10.
-        if v > 10 and v < 0:
-            raise ValueError('Nota da avaliação deve ser entre 0 e 10!')
-        return v
 
 class GetTrendingMoviesQueryModel(BaseModel):
     """
