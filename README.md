@@ -12,6 +12,8 @@ Tem como objetivo validar os conteúdos passados nas disciplinas da sprint de Ar
 
 # Funcionalidades
 
+Este componente tem como objetivo servir como gateway para o client. Fornecendo dados do componente "B" e persistindo as ações do usuário no componente "C":
+
 - Listagem com paginação de filmes em alta;
 - Busca paginada de filmes por termo;
 - Detalhes do filme pelo ID;
