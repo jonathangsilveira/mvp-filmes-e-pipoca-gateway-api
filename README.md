@@ -23,7 +23,7 @@ Tem como objetivo validar os conteúdos passados nas disciplinas da sprint de Ar
 
 # Arquitetura da aplicação
 
-
+![fluxograma](https://github.com/jonathangsilveira/mvp-filmes-e-pipoca-gateway-api/blob/main/fluxograma.png)
 
 # Tecnologias
 
