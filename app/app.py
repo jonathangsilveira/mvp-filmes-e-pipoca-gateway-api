@@ -23,6 +23,8 @@ search_tag = Tag(name='Busca de filmes',
                  description='Busca de filmes por termo')
 trendings_tag = Tag(name='Filmes em alta', 
                     description='Lista os filmes em alta pela janela de tempo')
+movie_tag = Tag(name='Detalhes do filme', 
+                description='Exibe detalhes de determinado filme')
 
 @app.route('/api')
 def swagger_doc():
@@ -31,7 +33,7 @@ def swagger_doc():
     """
     return redirect('/openapi/swagger')
 
-@app.get(rule='/api/movie', tags=[watchlist_tag], 
+@app.get(rule='/api/movie', tags=[movie_tag], 
          responses={200: MovieDetailsModel, 400: ErrorModel, 404: ErrorModel})
 def get_movie_details(query: MovieDetailsQuerySchema) -> Response:
     """
