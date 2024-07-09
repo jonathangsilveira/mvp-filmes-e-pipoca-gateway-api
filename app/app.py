@@ -56,7 +56,7 @@ def get_movie_details(query: MovieDetailsQuerySchema) -> Response:
     except Exception as e:
         print(f'Error: {str(e)}')
         return JsonResponse.make_error_response(
-            message=f'Não foi possível retornar os detalhos do id {path.movie_id}', 
+            message=f'Não foi possível retornar os detalhos do id {query.movie_id}', 
             code=400
         )
     
